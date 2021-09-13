@@ -17,11 +17,12 @@ type
     procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
   private
     { Private declarations }
+    FConfig: TConfig;
   public
     { Public declarations }
     procedure ApplyConfig(AConfig: TConfig);
     procedure ShowOnDisplay(const ADisplay: Byte);
-    procedure KickOutMouse(X, Y: Single);
+    procedure KickOutMouse(X, Y: Single; AScreen: Byte);
   end;
 
 var
@@ -47,32 +48,29 @@ end;
 procedure TForm16.FormCreate(Sender: TObject);
 const
   X = 0;
-var
-  lConfig: TConfig;
+
 begin
   lblCurrentCustomer.Text := string.Empty;
-  lConfig := TConfig.LoadFromFile('config.json');
-  try
-    ApplyConfig(lConfig);
-  finally
-    lConfig.Free;
-  end;
+  FConfig := TConfig.LoadFromFile('config.json');
+
+  ApplyConfig(FConfig);
+
 end;
 
 procedure TForm16.FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
 begin
-  KickOutMouse(X, Y);
+  KickOutMouse(X, Y, FConfig.Display);
 end;
 
-procedure TForm16.KickOutMouse(X, Y: Single);
+procedure TForm16.KickOutMouse(X, Y: Single; AScreen: Byte);
 var
   lCenter: Single;
 begin
-  lCenter := ClientWidth / 2;
-  if X > lCenter then
-    SetCursorPos(0, Round(Y))
+  lCenter := Screen.Displays[AScreen].WorkArea.Width / 2;
+  if X < lCenter then
+    SetCursorPos(0, Trunc(Y))
   else
-    SetCursorPos(ClientWidth + 1, Round(Y))
+    SetCursorPos(ClientWidth + 1, Trunc(Y))
 end;
 
 procedure TForm16.ShowOnDisplay(const ADisplay: Byte);
