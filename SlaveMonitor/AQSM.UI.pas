@@ -14,18 +14,23 @@ type
     Rectangle1: TRectangle;
     lblCurrentCustomer: TLabel;
     procedure FormCreate(Sender: TObject);
+    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
   private
     { Private declarations }
   public
     { Public declarations }
     procedure ApplyConfig(AConfig: TConfig);
     procedure ShowOnDisplay(const ADisplay: Byte);
+    procedure KickOutMouse(X, Y: Single);
   end;
 
 var
   Form16: TForm16;
 
 implementation
+
+uses
+  Winapi.Windows;
 
 {$R *.fmx}
 
@@ -41,7 +46,7 @@ end;
 
 procedure TForm16.FormCreate(Sender: TObject);
 const
-  x = 0;
+  X = 0;
 var
   lConfig: TConfig;
 begin
@@ -52,6 +57,22 @@ begin
   finally
     lConfig.Free;
   end;
+end;
+
+procedure TForm16.FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
+begin
+  KickOutMouse(X, Y);
+end;
+
+procedure TForm16.KickOutMouse(X, Y: Single);
+var
+  lCenter: Single;
+begin
+  lCenter := ClientWidth / 2;
+  if X > lCenter then
+    SetCursorPos(0, Round(Y))
+  else
+    SetCursorPos(ClientWidth + 1, Round(Y))
 end;
 
 procedure TForm16.ShowOnDisplay(const ADisplay: Byte);

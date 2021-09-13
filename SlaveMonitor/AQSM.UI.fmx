@@ -59406,10 +59406,12 @@ object Form16: TForm16
   FormFactor.Devices = [Desktop]
   FullScreen = True
   OnCreate = FormCreate
+  OnMouseMove = FormMouseMove
   DesignerMasterStyle = 0
   object Rectangle1: TRectangle
     Align = Client
     Fill.Color = x7C000000
+    HitTest = False
     Padding.Top = 50.000000000000000000
     Padding.Bottom = 50.000000000000000000
     Size.Width = 1044.000000000000000000
