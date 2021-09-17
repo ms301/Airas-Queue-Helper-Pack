@@ -194,6 +194,7 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="AQSM.Config.pas"/>
+        <DCCReference Include="AQSM.Utils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

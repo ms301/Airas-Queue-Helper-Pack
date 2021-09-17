@@ -4,7 +4,8 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   AQSM.UI in 'AQSM.UI.pas' {Form16},
-  AQSM.Config in 'AQSM.Config.pas';
+  AQSM.Config in 'AQSM.Config.pas',
+  AQSM.Utils in 'AQSM.Utils.pas';
 
 {$R *.res}
 

@@ -11,10 +11,10 @@ uses
 type
   TForm16 = class(TForm)
     lblManagerName: TLabel;
-    Rectangle1: TRectangle;
     lblCurrentCustomer: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
     FConfig: TConfig;
@@ -23,6 +23,7 @@ type
     procedure ApplyConfig(AConfig: TConfig);
     procedure ShowOnDisplay(const ADisplay: Byte);
     procedure KickOutMouse(X, Y: Single; AScreen: Byte);
+    procedure UpdateLabelFontSize(lbl: TLabel);
   end;
 
 var
@@ -31,6 +32,7 @@ var
 implementation
 
 uses
+  AQSM.Utils,
   Winapi.Windows;
 
 {$R *.fmx}
@@ -43,6 +45,7 @@ begin
     lblManagerName.Text := lblManagerName.Text + ' ' + AConfig.ManagerNumber.ToString;
   if AConfig.CurrentCustomer >= 0 then
     lblCurrentCustomer.Text := AConfig.CurrentCustomer.ToString;
+  Fill.Bitmap.Bitmap.LoadFromFile(AConfig.Background);
 end;
 
 procedure TForm16.FormCreate(Sender: TObject);
@@ -60,6 +63,14 @@ end;
 procedure TForm16.FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
 begin
   KickOutMouse(X, Y, FConfig.Display);
+
+end;
+
+procedure TForm16.FormResize(Sender: TObject);
+begin
+  lblManagerName.Height := ClientHeight * 0.2;
+  UpdateLabelFontSize(lblManagerName);
+  UpdateLabelFontSize(lblCurrentCustomer);
 end;
 
 procedure TForm16.KickOutMouse(X, Y: Single; AScreen: Byte);
@@ -84,6 +95,12 @@ begin
   end
   else
     raise Exception.Create('В системі встановлено лише один монітор');
+end;
+
+procedure TForm16.UpdateLabelFontSize(lbl: TLabel);
+
+begin
+  lbl.Font.Size := FontSizeForBox(lbl.Text, lbl.Font, lbl.Width, lbl.Height);
 end;
 
 end.
